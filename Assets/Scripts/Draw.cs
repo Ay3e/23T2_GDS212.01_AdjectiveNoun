@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class Draw : MonoBehaviour
 {
-    //reference for the camera
     public Camera m_camera;
     public GameObject brush;
+    public Collider2D boundary; // Reference to the boundary collider
 
     LineRenderer currentLineRenderer;
-
     Vector2 lastPos;
 
     private void Update()
@@ -26,10 +25,19 @@ public class Draw : MonoBehaviour
         if (Input.GetKey(KeyCode.Mouse0))
         {
             Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
-            if(mousePos != lastPos)
+
+            // Check if the mouse position is within the boundary collider
+            if (boundary == null || boundary.OverlapPoint(mousePos))
             {
-                AddAPoint(mousePos);
-                lastPos = mousePos;
+                if (mousePos != lastPos)
+                {
+                    AddAPoint(mousePos);
+                    lastPos = mousePos;
+                }
+            }
+            else
+            {
+                currentLineRenderer = null;
             }
         }
         else

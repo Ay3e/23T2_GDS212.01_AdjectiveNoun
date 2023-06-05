@@ -9,8 +9,10 @@ public class Dialogue : MonoBehaviour
     public string[] lines;
     public float textSpeed;
     private int index;
-    private bool isPaused;
-    private int blankCount;
+    private bool isBrushActive;
+    [SerializeField] private GameObject flashingText;
+    [SerializeField] private GameObject brush;
+    [SerializeField] private GameObject spaceToContinueText;
 
     private void Start()
     {
@@ -26,29 +28,10 @@ public class Dialogue : MonoBehaviour
             {
                 NextLine();
             }
-            else if (isPaused) // Resume dialogue if paused
-            {
-                isPaused = false;
-                StartCoroutine(TypeLine());
-            }
             else
             {
                 StopAllCoroutines();
                 textComponent.text = lines[index];
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (textComponent.text == lines[index]) // Check if the line is fully displayed
-            {
-                if (lines[index].Contains("_")) // Check if "_" is present in the line
-                {
-                    isPaused = true;
-                }
-                else
-                {
-                    NextLine();
-                }
             }
         }
     }
@@ -65,13 +48,6 @@ public class Dialogue : MonoBehaviour
             if (c == '_')
             {
                 textComponent.text += c;
-                blankCount++;
-                if(blankCount == 13)
-                {
-                    isPaused = true;
-                    yield return new WaitUntil(() => !isPaused); // Wait until isPaused becomes false
-                    blankCount = 0;
-                }
             }
             else
             {
@@ -88,10 +64,25 @@ public class Dialogue : MonoBehaviour
             index++;
             textComponent.text = string.Empty;
             StartCoroutine(TypeLine());
+            if (index == 1)
+            {
+                Debug.Log("hi");
+                //enable flahsing text
+                flashingText.SetActive(true);
+                //enable brush
+                brush.SetActive(true);
+                isBrushActive = true;
+                //when mouse(0) is pressed then active space to continue
+                if(isBrushActive==true && Input.GetMouseButtonDown(0))
+                {
+                    
+                    spaceToContinueText.SetActive(true);
+                }
+            }
         }
         else
         {
-            gameObject.SetActive(false);
+            //gameObject.SetActive(false);
         }
     }
 }
