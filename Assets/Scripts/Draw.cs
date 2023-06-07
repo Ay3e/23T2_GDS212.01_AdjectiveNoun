@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Draw : MonoBehaviour
@@ -10,6 +8,7 @@ public class Draw : MonoBehaviour
 
     LineRenderer currentLineRenderer;
     Vector2 lastPos;
+    public int brushCount; // Counter for brush clones
 
     private void Update()
     {
@@ -48,6 +47,11 @@ public class Draw : MonoBehaviour
 
     void CreateBrush()
     {
+        if (!brush.activeSelf)
+        {
+            return; // Exit the method if the brush is disabled
+        }
+
         GameObject brushInstance = Instantiate(brush);
         currentLineRenderer = brushInstance.GetComponent<LineRenderer>();
 
@@ -55,6 +59,9 @@ public class Draw : MonoBehaviour
 
         currentLineRenderer.SetPosition(0, mousePos);
         currentLineRenderer.SetPosition(1, mousePos);
+
+        brushCount++; // Increment the brush count
+        Debug.Log("Brush Count: " + brushCount);
     }
 
     void AddAPoint(Vector2 pointPos)
