@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class Dialogue : MonoBehaviour
 {
@@ -12,7 +13,11 @@ public class Dialogue : MonoBehaviour
     [SerializeField] private GameObject flashingText;
     [SerializeField] private GameObject brush;
     [SerializeField] private GameObject spaceToContinueText;
+    [SerializeField] private TextMeshProUGUI dialoguePanel;
     public Draw drawScript; // Reference to the Draw script
+    [SerializeField] private GameObject toFinalScoreAnimation;
+    private bool isDialogueFinished = false;
+
 
     private void Start()
     {
@@ -38,11 +43,13 @@ public class Dialogue : MonoBehaviour
         {
             flashingText.SetActive(false);
             spaceToContinueText.SetActive(true);
+            isDialogueFinished = true;
         }
         if(Input.GetKeyDown(KeyCode.Space))
         {
             drawScript.brushCount = 0;
         }
+        AnimateToScoreBoard();
     }
 
     void StartDialogue()
@@ -76,13 +83,28 @@ public class Dialogue : MonoBehaviour
             StartCoroutine(TypeLine());
             if (index == 1)
             {
-                flashingText.SetActive(true); // Enable flashing text
-                brush.SetActive(true); // Enables brush to be active
+                // Enable flashing text
+                flashingText.SetActive(true);
+                // Enable brush to be active
+                brush.SetActive(true); 
             }
         }
         else
         {
-            gameObject.SetActive(false);
+            gameObject.GetComponent<Image>().enabled = false;
+            dialoguePanel.enabled = false;
+        }
+    }
+
+    void AnimateToScoreBoard()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && isDialogueFinished)
+        {
+            flashingText.SetActive(false);
+            spaceToContinueText.SetActive(false);
+            toFinalScoreAnimation.SetActive(true);
+            gameObject.GetComponent<Image>().enabled = false;
+            dialoguePanel.enabled = false;
         }
     }
 }

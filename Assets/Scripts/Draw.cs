@@ -4,11 +4,13 @@ public class Draw : MonoBehaviour
 {
     public Camera m_camera;
     public GameObject brush;
-    public Collider2D boundary; // Reference to the boundary collider
+    // Reference to the boundary collider
+    public Collider2D boundary; 
 
     LineRenderer currentLineRenderer;
     Vector2 lastPos;
-    public int brushCount; // Counter for brush clones
+    // Counter for brush clones
+    public int brushCount; 
 
     private void Update()
     {
@@ -49,7 +51,8 @@ public class Draw : MonoBehaviour
     {
         if (!brush.activeSelf)
         {
-            return; // Exit the method if the brush is disabled
+            // Exit the method if the brush is disabled
+            return; 
         }
 
         GameObject brushInstance = Instantiate(brush);
@@ -59,8 +62,8 @@ public class Draw : MonoBehaviour
 
         currentLineRenderer.SetPosition(0, mousePos);
         currentLineRenderer.SetPosition(1, mousePos);
-
-        brushCount++; // Increment the brush count
+        // Increment the brush count
+        brushCount++; 
         Debug.Log("Brush Count: " + brushCount);
     }
 

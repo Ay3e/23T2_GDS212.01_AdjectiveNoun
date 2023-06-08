@@ -9,10 +9,7 @@ public class ToScoreBoard : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            cameraAnimation.enabled = true;
-            madTeacherAnimation.enabled = true;
-        }
+         cameraAnimation.enabled = true;
+         madTeacherAnimation.enabled = true;
     }
 }
