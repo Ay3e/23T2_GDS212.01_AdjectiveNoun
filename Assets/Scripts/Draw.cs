@@ -1,16 +1,25 @@
 using UnityEngine;
 
+using UnityEngine;
+
 public class Draw : MonoBehaviour
 {
     public Camera m_camera;
     public GameObject brush;
-    // Reference to the boundary collider
-    public Collider2D boundary; 
+    public Collider2D boundary;
+    public AudioClip drawingSound; // Audio clip for drawing
 
-    LineRenderer currentLineRenderer;
-    Vector2 lastPos;
-    // Counter for brush clones
-    public int brushCount; 
+    private AudioSource audioSource;
+    private LineRenderer currentLineRenderer;
+    private Vector2 lastPos;
+    public int brushCount;
+    private bool isDrawing;
+
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = drawingSound;
+    }
 
     private void Update()
     {
@@ -22,12 +31,14 @@ public class Draw : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             CreateBrush();
+            isDrawing = true;
+            audioSource.Play(); // Start playing the audio when drawing begins
         }
+
         if (Input.GetKey(KeyCode.Mouse0))
         {
             Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
 
-            // Check if the mouse position is within the boundary collider
             if (boundary == null || boundary.OverlapPoint(mousePos))
             {
                 if (mousePos != lastPos)
@@ -43,6 +54,11 @@ public class Draw : MonoBehaviour
         }
         else
         {
+            if (isDrawing)
+            {
+                isDrawing = false;
+                audioSource.Stop(); // Stop playing the audio when drawing stops
+            }
             currentLineRenderer = null;
         }
     }
@@ -51,8 +67,7 @@ public class Draw : MonoBehaviour
     {
         if (!brush.activeSelf)
         {
-            // Exit the method if the brush is disabled
-            return; 
+            return;
         }
 
         GameObject brushInstance = Instantiate(brush);
@@ -62,8 +77,7 @@ public class Draw : MonoBehaviour
 
         currentLineRenderer.SetPosition(0, mousePos);
         currentLineRenderer.SetPosition(1, mousePos);
-        // Increment the brush count
-        brushCount++; 
+        brushCount++;
         Debug.Log("Brush Count: " + brushCount);
     }
 

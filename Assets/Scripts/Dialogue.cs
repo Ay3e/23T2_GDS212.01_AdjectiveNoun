@@ -16,13 +16,19 @@ public class Dialogue : MonoBehaviour
     [SerializeField] private TextMeshProUGUI dialoguePanel;
     public Draw drawScript; // Reference to the Draw script
     [SerializeField] private GameObject toFinalScoreAnimation;
-    private bool isDialogueFinished = false;
+    public static bool isDialogueFinished = false;
+    [SerializeField] private AudioClip teacherFeetStomps;
+    private AudioSource audioSource;
+    public static float timer;
+    public static bool timerSetToZero;
 
 
     private void Start()
     {
         textComponent.text = string.Empty;
         StartDialogue();
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = teacherFeetStomps;
     }
 
     private void Update()
@@ -100,11 +106,14 @@ public class Dialogue : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && isDialogueFinished)
         {
-            flashingText.SetActive(false);
-            spaceToContinueText.SetActive(false);
+            audioSource.enabled = true;
+            Destroy(flashingText);
+            Destroy(spaceToContinueText);
             toFinalScoreAnimation.SetActive(true);
             gameObject.GetComponent<Image>().enabled = false;
             dialoguePanel.enabled = false;
+            timer = 0f;
+            timerSetToZero = true;
         }
     }
 }
