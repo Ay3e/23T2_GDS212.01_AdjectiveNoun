@@ -45,7 +45,7 @@ public class Dialogue : MonoBehaviour
                 textComponent.text = lines[index];
             }
         }
-        if (index == 1 && drawScript.brushCount > 0)
+        if (index == 3 && drawScript.brushCount > 0)
         {
             flashingText.SetActive(false);
             spaceToContinueText.SetActive(true);
@@ -87,7 +87,7 @@ public class Dialogue : MonoBehaviour
             index++;
             textComponent.text = string.Empty;
             StartCoroutine(TypeLine());
-            if (index == 1)
+            if (index == 3)
             {
                 // Enable flashing text
                 flashingText.SetActive(true);

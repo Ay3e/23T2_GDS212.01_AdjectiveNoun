@@ -6,38 +6,45 @@ public class EvaluationManager : MonoBehaviour
 {
     [SerializeField] private GameObject[] scorePossibilities;
     [SerializeField] private GameObject[] teacherExpressions;
-    private int randomisedScoreGenerator = 0;
+    [SerializeField] private AudioSource audioSource;
+    public GameObject finalScore;
 
+    private int randomisedScoreGenerator = 0;
     private bool expressionActivated = false;
-    private bool scoreActivated = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        randomisedScoreGenerator = Random.Range(0, 6);
+        randomisedScoreGenerator = Random.Range(0, 7);
+
         for (int i = 0; i < 6; i++)
         {
             if (randomisedScoreGenerator >= 4)
             {
-                scorePossibilities[4].SetActive(true);
-                scoreActivated = true;
+                finalScore = scorePossibilities[4];
             }
-            else if (randomisedScoreGenerator == i)
+            else if(randomisedScoreGenerator == i)
             {
-                scorePossibilities[i].SetActive(true);
-                scoreActivated = true;
+                finalScore = scorePossibilities[i];
             }
         }
     }
 
     private void Update()
     {
-        if (scoreActivated && !expressionActivated && Dialogue.isDialogueFinished && Dialogue.timerSetToZero)
+        if (!expressionActivated && Dialogue.isDialogueFinished && Dialogue.timerSetToZero)
         {
             Dialogue.timer += Time.deltaTime;
+
+            if (Dialogue.timer >= 2.1f)
+            {
+                audioSource.enabled = true;
+            }
+
             if (Dialogue.timer >= 2.66f)
             {
                 ActivateExpression();
+                finalScore.SetActive(true);
             }
         }
     }
