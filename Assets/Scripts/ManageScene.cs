@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class ManageScene : MonoBehaviour
 {
-    void ButtonToMainMenu()
+    [SerializeField] private GameObject sceneScript;
+
+    // Update is called once per frame
+
+    public void ButtonToPlay()
     {
-        SceneManager.LoadScene(0);
+        sceneScript.GetComponent<PlayScript>().enabled = true;
     }
 }
